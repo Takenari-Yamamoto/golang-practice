@@ -40,7 +40,7 @@ type contextKey string
 
 func DataLoaderMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		loader := loader.NewUserLoader() // newUserLoaderは前述のDataLoader初期化関数です
+		loader := loader.NewUserLoader()
 
 		ctx := context.WithValue(r.Context(), contextKey("userLoader"), loader)
 		r = r.WithContext(ctx)

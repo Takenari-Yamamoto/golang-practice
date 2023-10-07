@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github/Takenari-Yamamoto/golang-practice/gql-practice/domain"
 	"github/Takenari-Yamamoto/golang-practice/gql-practice/graph/model"
+
+	"github.com/samber/lo"
 )
 
 type UserRepository struct{}
@@ -35,13 +37,14 @@ func (repo *UserRepository) ListAllUsers() []*domain.User {
 }
 
 func (repo *UserRepository) GetUserByID(id string) (*model.User, error) {
-	fmt.Println("ユーザーを取得します", id)
+
 	all := repo.ListAllUsers()
-	var res domain.User
-	for _, v := range all {
-		if v.ID == id {
-			res = *v
-		}
+	res, ok := lo.Find(all, func(user *domain.User) bool {
+		return user.ID == id
+	})
+
+	if !ok {
+		return nil, fmt.Errorf("user not found")
 	}
 
 	return &model.User{
@@ -52,21 +55,16 @@ func (repo *UserRepository) GetUserByID(id string) (*model.User, error) {
 }
 
 func (repo *UserRepository) GetUsersByIDs(ids []string) ([]*model.User, error) {
-	fmt.Println("ユーザーを取得します", ids)
+
 	allUsers := repo.ListAllUsers()
-	var users []*model.User
-	for _, id := range ids {
-		for _, user := range allUsers {
-			if user.ID == id {
-				users = append(users,
-					&model.User{
-						ID:   user.ID,
-						Name: user.Name,
-					},
-				)
-			}
+	users := lo.Filter(allUsers, func(user *domain.User, _ int) bool {
+		return lo.Contains(ids, user.ID)
+	})
+
+	return lo.Map(users, func(user *domain.User, _ int) *model.User {
+		return &model.User{
+			ID:   user.ID,
+			Name: user.Name,
 		}
-	}
-	fmt.Println("ユーザーを取得しました", users)
-	return users, nil
+	}), nil
 }
