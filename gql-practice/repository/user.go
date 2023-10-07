@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"github/Takenari-Yamamoto/golang-practice/gql-practice/domain"
+	"github/Takenari-Yamamoto/golang-practice/gql-practice/graph/model"
 )
 
 type UserRepository struct{}
@@ -33,7 +34,7 @@ func (repo *UserRepository) ListAllUsers() []*domain.User {
 	return res
 }
 
-func (repo *UserRepository) GetUserByID(id string) *domain.User {
+func (repo *UserRepository) GetUserByID(id string) (*model.User, error) {
 	fmt.Println("ユーザーを取得します", id)
 	all := repo.ListAllUsers()
 	var res domain.User
@@ -42,5 +43,10 @@ func (repo *UserRepository) GetUserByID(id string) *domain.User {
 			res = *v
 		}
 	}
-	return &res
+
+	return &model.User{
+		ID:   res.ID,
+		Name: res.Name,
+	}, nil
+
 }

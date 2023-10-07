@@ -17,26 +17,12 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 
 // Todos is the resolver for the todos field.
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	res := r.todoRepo.ListAllTodos()
-	var todos []*model.Todo
-	for _, v := range res {
-		todos = append(todos, &model.Todo{
-			ID:     v.ID,
-			Text:   v.Text,
-			Done:   v.Done,
-			UserID: v.UserId,
-		})
-	}
-	return todos, nil
+	return r.todoRepo.ListAllTodos()
 }
 
 // User is the resolver for the user field.
 func (r *todoResolver) User(ctx context.Context, obj *model.Todo) (*model.User, error) {
-	res := r.userRepo.GetUserByID(obj.UserID)
-	return &model.User{
-		ID:   res.ID,
-		Name: res.Name,
-	}, nil
+	return r.userRepo.GetUserByID(obj.UserID)
 }
 
 // Mutation returns MutationResolver implementation.
