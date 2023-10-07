@@ -50,3 +50,23 @@ func (repo *UserRepository) GetUserByID(id string) (*model.User, error) {
 	}, nil
 
 }
+
+func (repo *UserRepository) GetUsersByIDs(ids []string) ([]*model.User, error) {
+	fmt.Println("ユーザーを取得します", ids)
+	allUsers := repo.ListAllUsers()
+	var users []*model.User
+	for _, id := range ids {
+		for _, user := range allUsers {
+			if user.ID == id {
+				users = append(users,
+					&model.User{
+						ID:   user.ID,
+						Name: user.Name,
+					},
+				)
+			}
+		}
+	}
+	fmt.Println("ユーザーを取得しました", users)
+	return users, nil
+}

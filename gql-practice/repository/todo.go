@@ -8,6 +8,10 @@ import (
 
 type TodoRepository struct{}
 
+func NewTodoRepository() *TodoRepository {
+	return &TodoRepository{}
+}
+
 func (repo *TodoRepository) ListAllTodos() ([]*model.Todo, error) {
 	var res []*domain.Todo
 	for i := 1; i <= 100; i++ {

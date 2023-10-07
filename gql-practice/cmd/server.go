@@ -1,7 +1,10 @@
 package main
 
 import (
+	"context"
 	"github/Takenari-Yamamoto/golang-practice/gql-practice/graph"
+	"github/Takenari-Yamamoto/golang-practice/gql-practice/graph/loader"
+	"github/Takenari-Yamamoto/golang-practice/gql-practice/repository"
 	"log"
 	"net/http"
 	"os"
@@ -18,11 +21,30 @@ func main() {
 		port = defaultPort
 	}
 
-	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+	todoRepo := repository.NewTodoRepository()
+	userLoader := loader.NewUserLoader()
+
+	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{
+		TodoRepo:   todoRepo,
+		UserLoader: userLoader,
+	}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
+	http.Handle("/query", DataLoaderMiddleware(srv)) // Middlewareを追加
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
+}
+
+type contextKey string
+
+func DataLoaderMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		loader := loader.NewUserLoader() // newUserLoaderは前述のDataLoader初期化関数です
+
+		ctx := context.WithValue(r.Context(), contextKey("userLoader"), loader)
+		r = r.WithContext(ctx)
+
+		next.ServeHTTP(w, r)
+	})
 }

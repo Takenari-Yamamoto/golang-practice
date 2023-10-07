@@ -6,8 +6,11 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github/Takenari-Yamamoto/golang-practice/gql-practice/graph/model"
+
+	"github.com/graph-gophers/dataloader"
 )
 
 // CreateTodo is the resolver for the createTodo field.
@@ -17,12 +20,25 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 
 // Todos is the resolver for the todos field.
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	return r.todoRepo.ListAllTodos()
+	return r.TodoRepo.ListAllTodos()
 }
 
 // User is the resolver for the user field.
 func (r *todoResolver) User(ctx context.Context, obj *model.Todo) (*model.User, error) {
-	return r.userRepo.GetUserByID(obj.UserID)
+	// DataLoaderを使用してユーザーを取得
+	thunk := r.UserLoader.Load(ctx, dataloader.StringKey(obj.UserID))
+	data, err := thunk()
+	if err != nil {
+		return nil, err
+	}
+
+	// データを適切な型にキャスト
+	user, ok := data.(*model.User)
+	if !ok {
+		return nil, errors.New("could not cast data to user")
+	}
+
+	return user, nil
 }
 
 // Mutation returns MutationResolver implementation.
