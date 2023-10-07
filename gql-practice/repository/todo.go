@@ -5,7 +5,9 @@ import (
 	"github/Takenari-Yamamoto/golang-practice/gql-practice/domain"
 )
 
-func ListAllTodos() []*domain.Todo {
+type TodoRepository struct{}
+
+func (repo *TodoRepository) ListAllTodos() []*domain.Todo {
 	var res []*domain.Todo
 	for i := 1; i <= 100; i++ {
 		res = append(res, &domain.Todo{

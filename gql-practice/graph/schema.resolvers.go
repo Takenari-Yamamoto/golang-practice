@@ -8,7 +8,6 @@ import (
 	"context"
 	"fmt"
 	"github/Takenari-Yamamoto/golang-practice/gql-practice/graph/model"
-	"github/Takenari-Yamamoto/golang-practice/gql-practice/repository"
 )
 
 // CreateTodo is the resolver for the createTodo field.
@@ -18,21 +17,26 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 
 // Todos is the resolver for the todos field.
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	res := repository.ListAllTodos()
+	res := r.todoRepo.ListAllTodos()
 	var todos []*model.Todo
 	for _, v := range res {
-		user := repository.GetUserByID(v.UserId)
 		todos = append(todos, &model.Todo{
-			ID:   v.ID,
-			Text: v.Text,
-			Done: v.Done,
-			User: &model.User{
-				ID:   user.ID,
-				Name: user.Name,
-			},
+			ID:     v.ID,
+			Text:   v.Text,
+			Done:   v.Done,
+			UserID: v.UserId,
 		})
 	}
 	return todos, nil
+}
+
+// User is the resolver for the user field.
+func (r *todoResolver) User(ctx context.Context, obj *model.Todo) (*model.User, error) {
+	res := r.userRepo.GetUserByID(obj.UserID)
+	return &model.User{
+		ID:   res.ID,
+		Name: res.Name,
+	}, nil
 }
 
 // Mutation returns MutationResolver implementation.
@@ -41,5 +45,9 @@ func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+// Todo returns TodoResolver implementation.
+func (r *Resolver) Todo() TodoResolver { return &todoResolver{r} }
+
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type todoResolver struct{ *Resolver }

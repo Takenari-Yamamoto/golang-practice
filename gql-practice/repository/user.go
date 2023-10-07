@@ -5,7 +5,9 @@ import (
 	"github/Takenari-Yamamoto/golang-practice/gql-practice/domain"
 )
 
-func ListAllUsers() []*domain.User {
+type UserRepository struct{}
+
+func (repo *UserRepository) ListAllUsers() []*domain.User {
 	res := []*domain.User{
 		{
 			ID:   domain.USER_ID_TKNR1216,
@@ -31,9 +33,9 @@ func ListAllUsers() []*domain.User {
 	return res
 }
 
-func GetUserByID(id string) *domain.User {
+func (repo *UserRepository) GetUserByID(id string) *domain.User {
 	fmt.Println("ユーザーを取得します", id)
-	all := ListAllUsers()
+	all := repo.ListAllUsers()
 	var res domain.User
 	for _, v := range all {
 		if v.ID == id {
