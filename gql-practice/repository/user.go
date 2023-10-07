@@ -1,30 +1,38 @@
 package repository
 
-import "github/Takenari-Yamamoto/golang-practice/gql-practice/domain"
+import (
+	"fmt"
+	"github/Takenari-Yamamoto/golang-practice/gql-practice/domain"
+)
 
 func ListAllUsers() []*domain.User {
-	res := []domain.User{
+	res := []*domain.User{
 		{
-			ID:   "1",
-			Name: "user1",
+			ID:   domain.USER_ID_TKNR1216,
+			Name: "たけなり",
 		},
 		{
-			ID:   "2",
-			Name: "user2",
+			ID:   domain.USER_ID_TAKASHI003,
+			Name: "たかし",
 		},
 		{
-			ID:   "3",
-			Name: "user3",
+			ID:   domain.USER_ID_TARO115,
+			Name: "太郎",
+		},
+		{
+			ID:   domain.USER_ID_HANAKO43,
+			Name: "花子",
+		},
+		{
+			ID:   domain.USER_ID_YAMADA234,
+			Name: "山田",
 		},
 	}
-	var users []*domain.User
-	for _, v := range res {
-		users = append(users, &v)
-	}
-	return users
+	return res
 }
 
 func GetUserByID(id string) *domain.User {
+	fmt.Println("ユーザーを取得します", id)
 	all := ListAllUsers()
 	var res domain.User
 	for _, v := range all {

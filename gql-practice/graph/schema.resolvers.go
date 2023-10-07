@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"github/Takenari-Yamamoto/golang-practice/gql-practice/graph/model"
+	"github/Takenari-Yamamoto/golang-practice/gql-practice/repository"
 )
 
 // CreateTodo is the resolver for the createTodo field.
@@ -17,7 +18,21 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 
 // Todos is the resolver for the todos field.
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: Todos - todos"))
+	res := repository.ListAllTodos()
+	var todos []*model.Todo
+	for _, v := range res {
+		user := repository.GetUserByID(v.UserId)
+		todos = append(todos, &model.Todo{
+			ID:   v.ID,
+			Text: v.Text,
+			Done: v.Done,
+			User: &model.User{
+				ID:   user.ID,
+				Name: user.Name,
+			},
+		})
+	}
+	return todos, nil
 }
 
 // Mutation returns MutationResolver implementation.
