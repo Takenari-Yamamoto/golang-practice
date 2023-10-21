@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github/Takenari-Yamamoto/golang-practice/gql-practice/domain"
 	"github/Takenari-Yamamoto/golang-practice/gql-practice/graph/model"
+	"github/Takenari-Yamamoto/golang-practice/gql-practice/pkg/errors"
 
 	"github.com/samber/lo"
 )
@@ -37,6 +38,32 @@ func (repo *TodoRepository) ListAllTodos() ([]*model.Todo, error) {
 }
 
 func (repo *TodoRepository) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
+
+	var errorDetails []errors.ErrorDetail
+
+	if input.Text == "" {
+		errorDetails = append(errorDetails, errors.ErrorDetail{
+			Message:   "テキストを入力してください",
+			Attribute: "text",
+		})
+	}
+
+	if input.UserID == "" {
+		errorDetails = append(errorDetails, errors.ErrorDetail{
+			Message:   "ユーザーIDを入力してください",
+			Attribute: "userId",
+		})
+	}
+
+	if len(errorDetails) > 0 {
+		return nil, errors.NewCustomError(errors.GqlError{
+			Message:     "invalid input",
+			Code:        errors.BAD_REQUEST,
+			UserMessage: "入力値が不正です",
+			Details:     &errorDetails,
+		})
+	}
+
 	return &model.Todo{
 		ID:     "todo1",
 		Text:   "todo1",
