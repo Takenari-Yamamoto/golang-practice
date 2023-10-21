@@ -7,7 +7,6 @@ package graph
 import (
 	"context"
 	"errors"
-	"fmt"
 	"github/Takenari-Yamamoto/golang-practice/gql-practice/graph/model"
 
 	"github.com/graph-gophers/dataloader"
@@ -15,7 +14,7 @@ import (
 
 // CreateTodo is the resolver for the createTodo field.
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
+	return r.TodoRepo.CreateTodo(ctx, input)
 }
 
 // Todos is the resolver for the todos field.

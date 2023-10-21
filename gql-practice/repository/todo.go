@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"fmt"
 	"github/Takenari-Yamamoto/golang-practice/gql-practice/domain"
 	"github/Takenari-Yamamoto/golang-practice/gql-practice/graph/model"
@@ -33,4 +34,13 @@ func (repo *TodoRepository) ListAllTodos() ([]*model.Todo, error) {
 			UserID: t.UserId,
 		}
 	}), nil
+}
+
+func (repo *TodoRepository) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
+	return &model.Todo{
+		ID:     "todo1",
+		Text:   "todo1",
+		Done:   false,
+		UserID: domain.GenerateUserId(),
+	}, nil
 }
