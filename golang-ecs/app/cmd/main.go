@@ -9,7 +9,7 @@ func main() {
 	fmt.Println("Starting server...")
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Request received!")
-		w.Write([]byte("Hello, Take-chan!!!!!!!!"))
+		w.Write([]byte("Hello, Takenari samansa chuchu!!!!!!!!"))
 	})
 	fmt.Println("Server started")
 
