@@ -21,17 +21,27 @@ resource "aws_ecs_task_definition" "golang-ecs-app" {
           protocol      = "tcp"
         }
       ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = "/ecs/golang-ecs-app",
+          "awslogs-region"        = "ap-northeast-1",
+          "awslogs-stream-prefix" = "ecs"
+        }
+      }
     }
   ])
 }
 
+
 # ECSサービス
 resource "aws_ecs_service" "golang_ecs_app_service" {
-  name            = "golang-ecs-app-service"
-  cluster         = aws_ecs_cluster.golang_ecs_cluster.id
-  task_definition = aws_ecs_task_definition.golang-ecs-app.arn
-  desired_count   = 1
-  launch_type     = "FARGATE"
+  name                 = "golang-ecs-app-service"
+  cluster              = aws_ecs_cluster.golang_ecs_cluster.id
+  task_definition      = aws_ecs_task_definition.golang-ecs-app.arn
+  desired_count        = 1
+  launch_type          = "FARGATE"
+  force_new_deployment = true
 
   network_configuration {
     subnets = [
