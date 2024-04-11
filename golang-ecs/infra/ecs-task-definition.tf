@@ -24,3 +24,26 @@ resource "aws_ecs_task_definition" "golang-ecs-app" {
     }
   ])
 }
+
+# ECSサービス
+resource "aws_ecs_service" "golang_ecs_app_service" {
+  name            = "golang-ecs-app-service"
+  cluster         = aws_ecs_cluster.golang_ecs_cluster.id
+  task_definition = aws_ecs_task_definition.golang-ecs-app.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets = [
+      aws_subnet.golang-ecs-app-subnet.id
+    ]
+    security_groups = [
+      aws_security_group.golang-ecs-app-sg.id
+    ]
+    assign_public_ip = true
+  }
+
+  depends_on = [
+    aws_ecs_task_definition.golang-ecs-app
+  ]
+}
