@@ -1,0 +1,24 @@
+name: Deploy gql-practice
+
+on:
+  push:
+    paths:
+      - "gql-practice/**"
+  pull_request:
+    paths:
+      - "gql-practice/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: "^1.17"
+      - name: Build and Deploy
+        run: |
+          cd gql-practice
+          go build -v ./cmd/server.go
+          # その他のデプロイスクリプトをここに記載
