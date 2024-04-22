@@ -12,21 +12,26 @@ import (
 	"github.com/Takenari-Yamamoto/golang-study/generated/graph/model"
 )
 
-// CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
-}
+// Tasks is the resolver for the tasks field.
+func (r *queryResolver) Tasks(ctx context.Context) ([]*model.Task, error) {
+	tasks, err := r.TaskService.ListAll()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get tasks: %w", err)
+	}
 
-// Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: Todos - todos"))
-}
+	var tasksModel []*model.Task
+	for _, task := range tasks {
+		tasksModel = append(tasksModel, &model.Task{
+			ID:          task.ID,
+			Title:       task.Title,
+			Description: &task.Description,
+		})
+	}
 
-// Mutation returns graph.MutationResolver implementation.
-func (r *Resolver) Mutation() graph.MutationResolver { return &mutationResolver{r} }
+	return tasksModel, nil
+}
 
 // Query returns graph.QueryResolver implementation.
 func (r *Resolver) Query() graph.QueryResolver { return &queryResolver{r} }
 
-type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
