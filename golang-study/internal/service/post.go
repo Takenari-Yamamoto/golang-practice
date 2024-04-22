@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github/Takenari-Yamamoto/golang-practice/golang-study/domain"
-	"github/Takenari-Yamamoto/golang-practice/golang-study/repository"
+	"github/Takenari-Yamamoto/golang-practice/golang-study/internal/domain"
+	"github/Takenari-Yamamoto/golang-practice/golang-study/internal/repository"
 )
 
 type IPostService interface {

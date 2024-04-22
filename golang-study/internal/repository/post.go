@@ -1,6 +1,6 @@
 package repository
 
-import "github/Takenari-Yamamoto/golang-practice/golang-study/domain"
+import "github/Takenari-Yamamoto/golang-practice/golang-study/internal/domain"
 
 type IPostRepository interface {
 	FindAll() ([]domain.Post, error)

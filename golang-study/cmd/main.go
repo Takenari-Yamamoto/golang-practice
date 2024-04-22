@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github/Takenari-Yamamoto/golang-practice/golang-study/repository"
-	"github/Takenari-Yamamoto/golang-practice/golang-study/service"
+	"github/Takenari-Yamamoto/golang-practice/golang-study/internal/repository"
+	"github/Takenari-Yamamoto/golang-practice/golang-study/internal/service"
 )
 
 func main() {
