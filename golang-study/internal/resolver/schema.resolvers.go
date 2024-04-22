@@ -8,8 +8,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Takenari-Yamamoto/golang-study/graph"
-	"github.com/Takenari-Yamamoto/golang-study/graph/model"
+	"github.com/Takenari-Yamamoto/golang-study/generated/graph"
+	"github.com/Takenari-Yamamoto/golang-study/generated/graph/model"
 )
 
 // CreateTodo is the resolver for the createTodo field.

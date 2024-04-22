@@ -7,7 +7,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/Takenari-Yamamoto/golang-study/graph"
+	"github.com/Takenari-Yamamoto/golang-study/generated/graph"
 	"github.com/Takenari-Yamamoto/golang-study/internal/resolver"
 )
 
