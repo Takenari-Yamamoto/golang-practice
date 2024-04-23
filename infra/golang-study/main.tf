@@ -12,6 +12,8 @@ terraform {
     region  = "ap-northeast-1"
     profile = "terraform_user"
   }
+
+  # backend "local" {}
 }
 
 # ----------------------
