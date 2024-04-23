@@ -24,6 +24,7 @@ func main() {
 		port = defaultPort
 	}
 
+	// TODO: config.go とかに切り出したいかも
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Tokyo",
 		os.Getenv("DB_HOST"),
