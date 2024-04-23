@@ -10,28 +10,109 @@ import (
 
 	"github.com/Takenari-Yamamoto/golang-study/generated/graph"
 	"github.com/Takenari-Yamamoto/golang-study/generated/graph/model"
+	"github.com/Takenari-Yamamoto/golang-study/internal/domain"
+	"github.com/gofrs/uuid"
+	"github.com/samber/lo"
 )
+
+// CreateTask is the resolver for the createTask field.
+func (r *mutationResolver) CreateTask(ctx context.Context, title string, description *string) (*model.Task, error) {
+
+	taskId := uuid.Must(uuid.NewV4()).String()
+	if err := r.TaskService.Create(ctx, &domain.Task{
+		Title:       title,
+		Description: lo.FromPtr(description),
+		ID:          taskId,
+	}); err != nil {
+		return nil, fmt.Errorf("failed to create task: %w", err)
+	}
+
+	res, err := r.TaskService.FindByID(ctx, taskId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get task: %w", err)
+	}
+
+	return &model.Task{
+		ID:          res.ID,
+		Title:       res.Title,
+		Description: &res.Description,
+	}, nil
+}
+
+// UpdateTask is the resolver for the updateTask field.
+func (r *mutationResolver) UpdateTask(ctx context.Context, id string, title *string, description *string) (*model.Task, error) {
+	err := r.TaskService.Update(ctx, &domain.Task{
+		ID:          id,
+		Title:       lo.FromPtr(title),
+		Description: lo.FromPtr(description),
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to update task: %w", err)
+	}
+	updatedTask, err := r.TaskService.FindByID(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get task: %w", err)
+	}
+	return &model.Task{
+		ID:          updatedTask.ID,
+		Title:       updatedTask.Title,
+		Description: &updatedTask.Description,
+	}, nil
+}
+
+// DeleteTask is the resolver for the deleteTask field.
+func (r *mutationResolver) DeleteTask(ctx context.Context, id string) (*model.Task, error) {
+	task, err := r.TaskService.FindByID(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get task: %w", err)
+	}
+
+	if err := r.TaskService.Delete(ctx, id); err != nil {
+		return nil, fmt.Errorf("failed to delete task: %w", err)
+	}
+
+	return &model.Task{
+		ID:          task.ID,
+		Title:       task.Title,
+		Description: &task.Description,
+	}, nil
+}
 
 // Tasks is the resolver for the tasks field.
 func (r *queryResolver) Tasks(ctx context.Context) ([]*model.Task, error) {
-	tasks, err := r.TaskService.ListAll()
+	tasks, err := r.TaskService.ListAll(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get tasks: %w", err)
 	}
 
-	var tasksModel []*model.Task
-	for _, task := range tasks {
-		tasksModel = append(tasksModel, &model.Task{
-			ID:          task.ID,
-			Title:       task.Title,
-			Description: &task.Description,
-		})
+	return lo.Map(tasks, func(t *domain.Task, _ int) *model.Task {
+		return &model.Task{
+			ID:          t.ID,
+			Title:       t.Title,
+			Description: &t.Description,
+		}
+	}), nil
+}
+
+// Task is the resolver for the task field.
+func (r *queryResolver) Task(ctx context.Context, id string) (*model.Task, error) {
+	task, err := r.TaskService.FindByID(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get task: %w", err)
 	}
 
-	return tasksModel, nil
+	return &model.Task{
+		ID:          task.ID,
+		Title:       task.Title,
+		Description: &task.Description,
+	}, nil
 }
+
+// Mutation returns graph.MutationResolver implementation.
+func (r *Resolver) Mutation() graph.MutationResolver { return &mutationResolver{r} }
 
 // Query returns graph.QueryResolver implementation.
 func (r *Resolver) Query() graph.QueryResolver { return &queryResolver{r} }
 
+type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

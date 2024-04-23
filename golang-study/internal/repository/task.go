@@ -1,22 +1,98 @@
 package repository
 
-import "github.com/Takenari-Yamamoto/golang-study/internal/domain"
+import (
+	"context"
+	"database/sql"
+
+	"github.com/Takenari-Yamamoto/golang-study/generated/database/models"
+	"github.com/Takenari-Yamamoto/golang-study/internal/domain"
+	"github.com/volatiletech/null"
+	"github.com/volatiletech/sqlboiler/boil"
+)
 
 type ITaskRepository interface {
-	ListAll() ([]*domain.Task, error)
+	ListAll(ctx context.Context) ([]*domain.Task, error)
+	FindByID(ctx context.Context, id string) (*domain.Task, error)
+	Create(ctx context.Context, task *domain.Task) error
+	Update(ctx context.Context, task *domain.Task) error
+	Delete(ctx context.Context, id string) error
 }
 
-type TaskRepository struct{}
-
-func NewTaskRepository() *TaskRepository {
-	return &TaskRepository{}
+type TaskRepository struct {
+	db *sql.DB
 }
 
-func (r *TaskRepository) ListAll() ([]*domain.Task, error) {
-	tasks := []*domain.Task{
-		{ID: "1", Title: "Title1", Description: "Description1"},
-		{ID: "2", Title: "Title2", Description: "Description2"},
-		{ID: "3", Title: "Title3", Description: "Description3"},
+func NewTaskRepository(
+	db *sql.DB,
+) *TaskRepository {
+	return &TaskRepository{
+		db: db,
 	}
-	return tasks, nil
+}
+
+func (r *TaskRepository) ListAll(ctx context.Context) ([]*domain.Task, error) {
+	tasks, err := models.Tasks().All(ctx, r.db)
+	if err != nil {
+		return nil, err
+	}
+
+	var result []*domain.Task
+	for _, task := range tasks {
+		result = append(result, &domain.Task{
+			ID:          task.ID,
+			Title:       task.Title,
+			Description: task.Description.String,
+		})
+	}
+	return result, nil
+
+}
+
+func (r *TaskRepository) FindByID(ctx context.Context, id string) (*domain.Task, error) {
+	task, err := models.Tasks(models.TaskWhere.ID.EQ(id)).One(ctx, r.db)
+	if err != nil {
+		return nil, err
+	}
+
+	return &domain.Task{
+		ID:          task.ID,
+		Title:       task.Title,
+		Description: task.Description.String,
+	}, nil
+}
+
+func (r *TaskRepository) Create(ctx context.Context, task *domain.Task) error {
+	taskToInsert := &models.Task{
+		ID:          task.ID,
+		Title:       task.Title,
+		Description: null.NewString(task.Description, task.Description != ""),
+	}
+	if err := taskToInsert.Insert(ctx, r.db, boil.Infer()); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *TaskRepository) Update(ctx context.Context, task *domain.Task) error {
+	taskToUpdate := &models.Task{
+		ID:          task.ID,
+		Title:       task.Title,
+		Description: null.NewString(task.Description, task.Description != ""),
+	}
+	if _, err := taskToUpdate.Update(ctx, r.db, boil.Infer()); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *TaskRepository) Delete(ctx context.Context, id string) error {
+	taskToDelete := &models.Task{
+		ID: id,
+	}
+	if _, err := taskToDelete.Delete(ctx, r.db); err != nil {
+		return err
+	}
+	return nil
 }
