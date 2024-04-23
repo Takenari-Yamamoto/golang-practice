@@ -21,6 +21,28 @@ func main() {
 		port = defaultPort
 	}
 
+	// dsn := fmt.Sprintf(
+	// 	"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Tokyo",
+	// 	os.Getenv("DB_HOST"),
+	// 	os.Getenv("DB_USER"),
+	// 	os.Getenv("DB_PASSWORD"),
+	// 	os.Getenv("DB_NAME"),
+	// 	os.Getenv("DB_PORT"),
+	// )
+
+	// db, err := sql.Open("postgres", dsn)
+	// if err != nil {
+	// 	log.Fatal("failed to init database: ", err)
+	// 	return
+	// }
+
+	// if err = db.Ping(); err != nil {
+	// 	log.Fatal("failed to connect database: ", err)
+	// 	return
+	// }
+
+	log.Default().Println("success to connect db!!")
+
 	taskRepository := repository.NewTaskRepository()
 	taskService := service.NewTaskService(taskRepository)
 

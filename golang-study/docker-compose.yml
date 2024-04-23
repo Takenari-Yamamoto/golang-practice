@@ -10,6 +10,7 @@ services:
       - "8080:8080"
     volumes:
       - .:/app
+    command: ["go", "run", "cmd/app/server.go"]
     environment:
       - DB_HOST=db
       - DB_PORT=${POSTGRES_DB_PORT}
