@@ -18,5 +18,4 @@ resource "aws_subnet" "golang-study-private-a" {
   tags = {
     Name = "golang-study-private-a"
   }
-
 }
