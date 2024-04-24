@@ -19,3 +19,25 @@ resource "aws_subnet" "golang-study-private-a" {
     Name = "golang-study-private-a"
   }
 }
+
+resource "aws_subnet" "golang-study-public-b" {
+  vpc_id                  = aws_vpc.golang-study-vpc.id
+  cidr_block              = "10.0.3.0/24"
+  availability_zone       = "ap-northeast-1b"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "golang-study-public-b"
+  }
+}
+
+resource "aws_subnet" "golang-study-private-b" {
+  vpc_id                  = aws_vpc.golang-study-vpc.id
+  cidr_block              = "10.0.4.0/24"
+  availability_zone       = "ap-northeast-1b"
+  map_public_ip_on_launch = false
+
+  tags = {
+    Name = "golang-study-private-b"
+  }
+}
