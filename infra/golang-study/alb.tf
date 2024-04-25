@@ -9,7 +9,7 @@ resource "aws_lb" "golang-study-api-public" {
   # ALBが配置されるサブネット。複数のサブネットを指定することで高可用性が保たれます
   subnets = [
     aws_subnet.golang-study-public-a.id,
-    aws_subnet.golang-study-public-b.id
+    aws_subnet.golang-study-public-c.id
   ]
 
   enable_deletion_protection = false
