@@ -90,26 +90,26 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
 /**
 ** タスク定義を使用して、指定されたサブネットとセキュリティグループ内でタスクを実行
 **/
-resource "aws_ecs_service" "golang-study-app-service" {
-  name            = "golang-study-app-service"
-  cluster         = aws_ecs_cluster.golang_study_cluster.arn
-  task_definition = aws_ecs_task_definition.golang_study_app.arn
-  desired_count   = 1
-  launch_type     = "FARGATE"
+# resource "aws_ecs_service" "golang-study-app-service" {
+#   name            = "golang-study-app-service"
+#   cluster         = aws_ecs_cluster.golang_study_cluster.arn
+#   task_definition = aws_ecs_task_definition.golang_study_app.arn
+#   desired_count   = 1
+#   launch_type     = "FARGATE"
 
-  network_configuration {
-    subnets          = [aws_subnet.golang-study-public-a.id, aws_subnet.golang-study-public-c.id]
-    security_groups  = [aws_security_group.golang-study-sg.id]
-    assign_public_ip = true
-  }
+#   network_configuration {
+#     subnets          = [aws_subnet.golang-study-public-a.id, aws_subnet.golang-study-public-c.id]
+#     security_groups  = [aws_security_group.golang-study-sg.id]
+#     assign_public_ip = true
+#   }
 
-  load_balancer {
-    target_group_arn = aws_lb_target_group.golang-study-api-public-tg.arn
-    container_name   = "golang-study-app"
-    container_port   = 80
-  }
+#   load_balancer {
+#     target_group_arn = aws_lb_target_group.golang-study-api-public-tg.arn
+#     container_name   = "golang-study-app"
+#     container_port   = 80
+#   }
 
-  depends_on = [
-    aws_lb_listener.golang-study-api-public-listener
-  ]
-}
+#   depends_on = [
+#     aws_lb_listener.golang-study-api-public-listener
+#   ]
+# }
