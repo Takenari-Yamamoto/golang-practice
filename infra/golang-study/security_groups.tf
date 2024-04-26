@@ -61,7 +61,7 @@ resource "aws_security_group" "golang-study-db-sg" {
     to_port   = 5432
     protocol  = "tcp"
     security_groups = [
-      // TODO: ECS サービスのセキュリティグループを指定
+      aws_security_group.golang-study-sg.id
     ]
   }
   egress {
