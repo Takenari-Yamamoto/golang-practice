@@ -2,13 +2,13 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/Takenari-Yamamoto/golang-study/config"
 	"github.com/Takenari-Yamamoto/golang-study/generated/graph"
 	"github.com/Takenari-Yamamoto/golang-study/internal/repository"
 	"github.com/Takenari-Yamamoto/golang-study/internal/resolver"
@@ -24,15 +24,8 @@ func main() {
 		port = defaultPort
 	}
 
-	// TODO: config.go とかに切り出したいかも
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Tokyo",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_PORT"),
-	)
+	dbConfig := config.GetDBConfig()
+	dsn := dbConfig.DSN()
 
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
