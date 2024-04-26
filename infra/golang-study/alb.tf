@@ -23,7 +23,7 @@ resource "aws_lb" "golang-study-api-public" {
 resource "aws_lb_target_group" "golang-study-api-public-tg" {
   name = "golang-study-api-public-tg"
   #  バックエンドと通信する際のポートとプロトコル
-  port        = 80
+  port        = 8080
   protocol    = "HTTP"
   vpc_id      = aws_vpc.golang-study-vpc.id
   target_type = "ip"

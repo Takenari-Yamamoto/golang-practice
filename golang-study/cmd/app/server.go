@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -19,6 +20,8 @@ import (
 const defaultPort = "8080"
 
 func main() {
+
+	fmt.Println("try to start server...")
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
@@ -26,6 +29,8 @@ func main() {
 
 	dbConfig := config.GetDBConfig()
 	dsn := dbConfig.DSN()
+
+	fmt.Println("dsn: ", dsn)
 
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {

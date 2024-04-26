@@ -28,8 +28,8 @@ resource "aws_ecs_task_definition" "golang_study_app" {
       essential = true
       portMappings = [
         {
-          containerPort = 80
-          hostPort      = 80
+          containerPort = 8080
+          hostPort      = 8080
           protocol      = "tcp"
         }
       ],
@@ -45,23 +45,23 @@ resource "aws_ecs_task_definition" "golang_study_app" {
       // TODO: secreat manager 的なやつで管理したい
       environment = [
         {
-          name  = "DATABASE_HOST"
+          name  = "DB_HOST"
           value = aws_db_instance.golang-study-db.address
         },
         {
-          name  = "DATABASE_PORT"
+          name  = "DB_PORT"
           value = "5432"
         },
         {
-          name  = "DATABASE_USER"
+          name  = "DB_USER"
           value = "dbuser"
         },
         {
-          name  = "DATABASE_PASSWORD"
+          name  = "DB_PASSWORD"
           value = "dbpassword"
         },
         {
-          name  = "DATABASE_NAME"
+          name  = "DB_NAME"
           value = "golang_study_db"
         }
       ]
@@ -114,7 +114,7 @@ resource "aws_ecs_service" "golang-study-app-service" {
   load_balancer {
     target_group_arn = aws_lb_target_group.golang-study-api-public-tg.arn
     container_name   = "golang-study-app"
-    container_port   = 80
+    container_port   = 8080
   }
 
   depends_on = [

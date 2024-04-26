@@ -24,6 +24,8 @@ resource "aws_db_instance" "golang-study-db" {
   # 障害発生時に自動的にフェイルオーバーが行われます
   multi_az = false
 
+
+
   tags = {
     Name = "golang-study-rds"
   }
