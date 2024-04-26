@@ -53,9 +53,19 @@ resource "aws_lb_listener" "golang-study-api-public-listener" {
   port     = "80"
   protocol = "HTTP"
 
+  # default_action {
+  #   type             = "forward"
+  #   target_group_arn = aws_lb_target_group.golang-study-api-public-tg.arn
+  # }
+
+  # 一時的にデフォルトアクションを削除してターゲットグループの更新を可能に
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.golang-study-api-public-tg.arn
+    type = "fixed-response"
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Temporary unavailable"
+      status_code  = "503"
+    }
   }
 
 }
