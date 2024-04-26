@@ -23,9 +23,10 @@ resource "aws_lb" "golang-study-api-public" {
 resource "aws_lb_target_group" "golang-study-api-public-tg" {
   name = "golang-study-api-public-tg"
   #  バックエンドと通信する際のポートとプロトコル
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = aws_vpc.golang-study-vpc.id
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.golang-study-vpc.id
+  target_type = "ip"
 
   # ターゲットの健康状態をチェックするための設定です。正常に動作しているかを確認し、問題があるインスタンスからはトラフィックを引き離します
   health_check {
