@@ -121,3 +121,31 @@ resource "aws_ecs_service" "golang-study-app-service" {
     aws_lb_listener.golang-study-api-public-listener
   ]
 }
+
+/**
+** ECSタスクがCloudWatch Logsにログを書き込むためのIAMポリシー
+**/
+resource "aws_iam_policy" "cloudwatch_logs_policy" {
+  name        = "ecs_cloudwatch_logs_policy"
+  description = "Allow ECS to write logs to CloudWatch"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:CreateLogGroup"
+        ],
+        Resource = "arn:aws:logs:ap-northeast-1:879853972315:log-group:/ecs/golang-study-app:*"
+      },
+    ],
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_logs_policy_attachment" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = aws_iam_policy.cloudwatch_logs_policy.arn
+}
