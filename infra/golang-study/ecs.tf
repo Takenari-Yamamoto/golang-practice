@@ -42,7 +42,6 @@ resource "aws_ecs_task_definition" "golang_study_app" {
         }
       }
 
-      // TODO: secreat manager 的なやつで管理したい
       environment = [
         {
           name  = "DB_HOST"

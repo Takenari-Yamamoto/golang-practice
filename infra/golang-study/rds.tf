@@ -1,5 +1,6 @@
 # Terraform を使用して AWS RDS (Amazon Relational Database Service) のデータベースインスタンスを管理するためのリソース
 resource "aws_db_instance" "golang-study-db" {
+
   # データベースインスタンスの一意の識別子です。AWS コンソール内でインスタンスを簡単に識別できるように
   identifier = "golang-study-rds"
   # 使用するデータベースの種類を指定します。ここでは postgres が使用されていますが、他にも mysql, oracle, sqlserver などが利用可能
@@ -24,6 +25,7 @@ resource "aws_db_instance" "golang-study-db" {
   # 障害発生時に自動的にフェイルオーバーが行われます
   multi_az = false
 
+  parameter_group_name = aws_db_parameter_group.go-study-db-parameter-group.name
 
 
   tags = {
@@ -36,4 +38,15 @@ resource "aws_db_instance" "golang-study-db" {
 resource "aws_db_subnet_group" "golang-study-db_subnet_group" {
   name       = "golang-study-db-subnet-group"
   subnet_ids = [aws_subnet.golang-study-private-a.id, aws_subnet.golang-study-private-c.id]
+}
+
+resource "aws_db_parameter_group" "go-study-db-parameter-group" {
+  family = "postgres16"
+  name   = "go-study-db-parameter-group"
+
+  parameter {
+    name         = "shared_preload_libraries"
+    value        = "pg_stat_statements"
+    apply_method = "pending-reboot"
+  }
 }
