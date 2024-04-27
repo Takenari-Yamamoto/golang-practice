@@ -26,7 +26,7 @@ resource "aws_db_instance" "golang-study-db" {
   multi_az = false
 
   parameter_group_name = aws_db_parameter_group.go-study-db-parameter-group.name
-
+  skip_final_snapshot  = true
 
   tags = {
     Name = "golang-study-rds"
