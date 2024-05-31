@@ -6,3 +6,6 @@ plugins:
   - name: go-grpc
     out: gen
     opt: paths=source_relative
+  - name: doc
+    out: docs
+    opt: markdown,source_relative
