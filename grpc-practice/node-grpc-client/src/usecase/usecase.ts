@@ -1,14 +1,24 @@
 import { HelloServiceClient } from "../interface/helloServiceClient";
+import { UserServiceClient } from "../interface/userService";
 
 export class UseCase {
   private helloServiceClient: HelloServiceClient;
+  private userServiceClient: UserServiceClient;
 
-  constructor({ helloService }: { helloService: HelloServiceClient }) {
+  constructor({
+    helloService,
+    userService,
+  }: {
+    helloService: HelloServiceClient;
+    userService: UserServiceClient;
+  }) {
     this.helloServiceClient = helloService;
+    this.userServiceClient = userService;
   }
 
   async sayHello(id: string): Promise<string> {
-    const { message } = await this.helloServiceClient.sayHello({ id });
-    return message;
+    const user = await this.userServiceClient.getUserById({ id });
+    const response = await this.helloServiceClient.sayHello({ id: user.id });
+    return response.message;
   }
 }

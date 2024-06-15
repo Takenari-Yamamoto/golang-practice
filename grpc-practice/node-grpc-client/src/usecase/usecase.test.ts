@@ -1,27 +1,26 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { UseCase } from "./usecase";
 import {
   HelloServiceClient,
-  MockServiceClient,
+  MockHelloServiceClient,
 } from "../interface/helloServiceClient";
 
 describe(UseCase, () => {
-  let usecase: UseCase;
-  let mockServiceClient: MockServiceClient;
-
-  beforeEach(() => {
-    mockServiceClient = new MockServiceClient();
-    usecase = new UseCase({ helloService: mockServiceClient });
+  const mockHelloServiceClient = vi.mocked(MockHelloServiceClient);
+  const mock;
+  const useCase = new UseCase({
+    helloService: mockHelloServiceClient,
+    userService: null as any,
   });
+  beforeEach(() => {});
 
   it("should say hello", async () => {
-    vi.spyOn(mockServiceClient, "sayHello").mockResolvedValueOnce({
-      message: "Hello",
+    vi.mocked(mockHelloServiceClient.sayHello).mockResolvedValue({
+      message: "Hello, Mock!",
     });
 
-    await usecase.sayHello("123");
-
-    expect(mockServiceClient.sayHello).toHaveBeenCalledWith({ id: "123" });
-    expect(mockServiceClient.sayHello).toHaveBeenCalledTimes(1);
+    const response = await useCase.sayHello("123");
+    expect(response).toEqual({ message: "Hello, Mock!" });
+    expect(mockHelloServiceClient.sayHello).toHaveBeenCalledWith({ id: "123" });
   });
 });

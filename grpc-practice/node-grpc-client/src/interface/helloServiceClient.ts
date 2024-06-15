@@ -1,4 +1,4 @@
-import { vi } from "vitest";
+import { MockClient } from "../utils/mock";
 
 export type HelloServiceClient = {
   readonly sayHello: (request: { id: string }) => Promise<{
@@ -6,6 +6,8 @@ export type HelloServiceClient = {
   }>;
 };
 
-export class MockServiceClient implements HelloServiceClient {
-  sayHello = vi.fn();
+export class MockHelloServiceClient extends MockClient<HelloServiceClient> {
+  constructor() {
+    super();
+  }
 }
