@@ -1,24 +1,30 @@
-import { HelloServiceClient } from "../interface/helloServiceClient";
+import { BookServiceClient } from "../interface/bookService";
 import { UserServiceClient } from "../interface/userService";
 
 export class UseCase {
-  private helloServiceClient: HelloServiceClient;
   private userServiceClient: UserServiceClient;
+  private bookServiceClient: BookServiceClient;
 
   constructor({
-    helloService,
     userService,
+    bookService,
   }: {
-    helloService: HelloServiceClient;
     userService: UserServiceClient;
+    bookService: BookServiceClient;
   }) {
-    this.helloServiceClient = helloService;
     this.userServiceClient = userService;
+    this.bookServiceClient = bookService;
   }
 
-  async sayHello(id: string): Promise<string> {
+  async getUserById(id: string) {
     const user = await this.userServiceClient.getUserById({ id });
-    const response = await this.helloServiceClient.sayHello({ id: user.id });
-    return response.message;
+    const book = await this.bookServiceClient.listBooksByUserId({
+      userId: user.id,
+    });
+
+    return {
+      ...user,
+      book,
+    };
   }
 }
