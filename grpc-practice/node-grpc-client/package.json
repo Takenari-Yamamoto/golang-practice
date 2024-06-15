@@ -20,5 +20,8 @@
   ],
   "devDependencies": {
     "vitest": "^1.6.0"
+  },
+  "dependencies": {
+    "@connectrpc/connect": "^1.4.0"
   }
 }
