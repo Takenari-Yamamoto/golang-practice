@@ -1,11 +1,18 @@
 version: v1
+managed:
+  enabled: true
+  go_package_prefix:
+    default: github/Takenari-Yamamoto/golang-grpc-server/generated
 plugins:
-  - name: go
-    out: gen
+  - plugin: buf.build/protocolbuffers/go
+    out: golang-grpc-server/generated
     opt: paths=source_relative
-  - name: go-grpc
-    out: gen
+  - plugin: buf.build/grpc/go
+    out: golang-grpc-server/generated
     opt: paths=source_relative
-  - name: doc
-    out: docs
-    opt: markdown,source_relative
+  - plugin: buf.build/connectrpc/es
+    out: node-grpc-client/generated
+    opt: js_import_style=legacy_commonjs
+  - plugin: buf.build/bufbuild/es:v1.9.0
+    out: node-grpc-client/generated
+    opt: js_import_style=legacy_commonjs
