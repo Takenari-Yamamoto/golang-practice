@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package money;
+
+option go_package = "github/Takenari-Yamamoto/golang-grpc-server/generated";
+
+message Money {
+  string currency_code = 1;
+  int64 amount = 2;
+}
+
+message MoneyRequest {
+  Money money = 1;
+}
+
+message MoneyResponse {
+  Money money = 1;
+}
+
+service MoneyService {
+  rpc GetMoney(MoneyRequest) returns (MoneyResponse);
+  rpc SendMoney(MoneyRequest) returns (MoneyResponse);
+}
