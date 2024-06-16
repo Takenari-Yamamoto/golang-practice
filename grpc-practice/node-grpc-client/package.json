@@ -22,6 +22,7 @@
     "vitest": "^1.6.0"
   },
   "dependencies": {
+    "@bufbuild/protobuf": "^1.10.0",
     "@connectrpc/connect": "^1.4.0"
   }
 }

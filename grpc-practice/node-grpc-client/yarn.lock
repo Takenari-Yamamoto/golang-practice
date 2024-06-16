@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@bufbuild/protobuf@^1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@bufbuild/protobuf/-/protobuf-1.10.0.tgz#1a67ac889c2d464a3492b3e54c38f80517963b16"
+  integrity sha512-QDdVFLoN93Zjg36NoQPZfsVH9tZew7wKDKyV5qRdj8ntT4wQCOradQjRaTdwMhWUYsgKsvCINKKm87FdEk96Ag==
+
 "@connectrpc/connect@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@connectrpc/connect/-/connect-1.4.0.tgz#4a987d6c9fc78ea61bce7d19e27b2de4d14c658f"
