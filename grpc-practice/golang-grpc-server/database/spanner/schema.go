@@ -80,7 +80,7 @@ func (t *TableDefine) DDL() string {
 			t.Interleave.OnDelete)
 	}
 	// End of CREATE schema
-	r = r + ";"
+	// r = r + ";"
 
 	if len(t.Indexes) == 0 {
 		return r

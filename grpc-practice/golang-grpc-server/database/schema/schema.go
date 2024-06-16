@@ -14,17 +14,18 @@ var (
 			Columns: []*spanner.ColumnDefine{
 				{
 					Name:      "ID",
-					Attribute: "STRING(MAX)",
+					Attribute: "STRING(MAX) NOT NULL",
 				},
 				{
 					Name:      "Name",
-					Attribute: "STRING(MAX)",
+					Attribute: "STRING(MAX) NOT NULL",
 				},
 				{
-					Name:      "Age",
-					Attribute: "INT64",
+					Name:      "CreatedBy",
+					Attribute: "STRING(MAX) NOT NULL",
 				},
 			},
+			PrimaryKeys: []string{"ID"},
 		},
 	}
 

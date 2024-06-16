@@ -26,16 +26,6 @@ func CreateDatabase(ctx context.Context, schema []string) string {
 		log.Fatalf("Spanner emulator is not running")
 	}
 
-	// grpcOptions := []option.ClientOption{
-	// 	option.WithEndpoint("localhost:9010"),
-	// 	option.WithoutAuthentication(),
-	// 	option.WithGRPCDialOption(grpc.WithBlock()),
-	// 	option.WithGRPCDialOption(grpc.WithConnectParams(grpc.ConnectParams{
-	// 		Backoff:           backoff.DefaultConfig,
-	// 		MinConnectTimeout: 5 * time.Second,
-	// 	})),
-	// }
-
 	adminClient, err := database.NewDatabaseAdminClient(ctx)
 	if err != nil {
 		log.Fatalf("Failed to create database admin client: %v", err)
@@ -48,7 +38,15 @@ func CreateDatabase(ctx context.Context, schema []string) string {
 	op, err := adminClient.CreateDatabase(ctx, &databasepb.CreateDatabaseRequest{
 		Parent:          instance,
 		CreateStatement: "CREATE DATABASE `" + database + "`",
-		ExtraStatements: schema,
+		ExtraStatements: []string{
+			`CREATE TABLE Users (
+				ID STRING(MAX) NOT NULL,
+				Name STRING(MAX) NOT NULL,
+				CreatedBy STRING(MAX) NOT NULL,
+			) PRIMARY KEY (ID)`,
+		},
+		// 本当は下記のようにしたいが、フォーマットがうまく行かず、エラーになるので修正が必要
+		// ExtraStatements: schema,
 	})
 	if err != nil {
 		log.Fatalf("adminClient.CreateDatabase: %v", err)
