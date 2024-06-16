@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"cloud.google.com/go/spanner"
+	database "cloud.google.com/go/spanner/admin/database/apiv1"
 	"cloud.google.com/go/spanner/admin/database/apiv1/databasepb"
-	"github.com/Takenari-Yamamoto/golang-grpc-server/database"
 )
 
 var MaxWait = 10 * time.Second
@@ -26,13 +26,23 @@ func CreateDatabase(ctx context.Context, schema []string) string {
 		log.Fatalf("Spanner emulator is not running")
 	}
 
+	// grpcOptions := []option.ClientOption{
+	// 	option.WithEndpoint("localhost:9010"),
+	// 	option.WithoutAuthentication(),
+	// 	option.WithGRPCDialOption(grpc.WithBlock()),
+	// 	option.WithGRPCDialOption(grpc.WithConnectParams(grpc.ConnectParams{
+	// 		Backoff:           backoff.DefaultConfig,
+	// 		MinConnectTimeout: 5 * time.Second,
+	// 	})),
+	// }
+
 	adminClient, err := database.NewDatabaseAdminClient(ctx)
 	if err != nil {
 		log.Fatalf("Failed to create database admin client: %v", err)
 	}
 	defer adminClient.Close()
 
-	database := database.Name
+	database := "test-database"
 	instance := "projects/" + projectID + "/instances/" + instanceID
 
 	op, err := adminClient.CreateDatabase(ctx, &databasepb.CreateDatabaseRequest{
