@@ -23,6 +23,7 @@ describe(UseCase, () => {
       id: "user1",
       name: "John Doe",
     });
+
     vi.mocked(mockBookService.listBooksByUserId).mockResolvedValue([
       { id: "book1", userId: "user1", title: "Book Title 1" },
     ]);

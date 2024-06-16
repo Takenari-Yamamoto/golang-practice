@@ -32,28 +32,19 @@ export class MockBookServiceClient implements BookServiceClient {
   listBooksByUserId = vi.fn<
     [request: { userId: string }],
     Promise<{ id: string; userId: string; title: string }[]>
-  >() as (request: {
-    userId: string;
-  }) => Promise<{ id: string; userId: string; title: string }[]>;
+  >();
 
   findBookById = vi.fn<
     [request: { id: string }],
     Promise<{ id: string; userId: string; title: string }>
-  >() as (request: {
-    id: string;
-  }) => Promise<{ id: string; userId: string; title: string }>;
+  >();
+
   createBook = vi.fn<
     [request: { userId: string; title: string }],
     Promise<{ id: string; userId: string; title: string }>
-  >() as (request: {
-    userId: string;
-    title: string;
-  }) => Promise<{ id: string; userId: string; title: string }>;
+  >();
   updateBook = vi.fn<
     [request: { id: string; title: string }],
     Promise<{ id: string; userId: string; title: string }>
-  >() as (request: {
-    id: string;
-    title: string;
-  }) => Promise<{ id: string; userId: string; title: string }>;
+  >();
 }
