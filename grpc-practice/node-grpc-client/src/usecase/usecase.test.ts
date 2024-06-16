@@ -29,13 +29,20 @@ describe(UseCase, () => {
     ]);
 
     const result = await useCase.getUserById("user1");
-    expect(result).toEqual({
-      id: "user1",
-      name: "John Doe",
-      book: [{ id: "book1", userId: "user1", title: "Book Title 1" }],
-    });
+    expect(result).toMatchInlineSnapshot(`
+      {
+        "book": [
+          {
+            "id": "book1",
+            "title": "Book Title 1",
+            "userId": "user1",
+          },
+        ],
+        "id": "user1",
+        "name": "John Doe",
+      }
+    `);
 
-    // モックメソッドの呼び出しを検証
     expect(mockUserService.getUserById).toHaveBeenCalledWith({ id: "user1" });
     expect(mockBookService.listBooksByUserId).toHaveBeenCalledWith({
       userId: "user1",
@@ -51,11 +58,13 @@ describe(UseCase, () => {
 
     const result = await useCase.getUserById("user2");
 
-    expect(result).toEqual({
-      id: "user2",
-      name: "Jane Doe",
-      book: [],
-    });
+    expect(result).toMatchInlineSnapshot(`
+      {
+        "book": [],
+        "id": "user2",
+        "name": "Jane Doe",
+      }
+    `);
 
     expect(mockUserService.getUserById).toHaveBeenCalledWith({ id: "user2" });
     expect(mockBookService.listBooksByUserId).toHaveBeenCalledWith({

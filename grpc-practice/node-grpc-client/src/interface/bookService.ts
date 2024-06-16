@@ -43,6 +43,7 @@ export class MockBookServiceClient implements BookServiceClient {
     [request: { userId: string; title: string }],
     Promise<{ id: string; userId: string; title: string }>
   >();
+
   updateBook = vi.fn<
     [request: { id: string; title: string }],
     Promise<{ id: string; userId: string; title: string }>
