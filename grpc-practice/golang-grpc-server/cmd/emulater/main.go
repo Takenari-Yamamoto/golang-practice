@@ -1,11 +1,6 @@
 package main
 
 import (
-	// "github.com/Takenari-Yamamoto/golang-grpc-server/database/spanner/schema"
-	// golang-grpc-server/database/spanner
-	// "github.com/Takenari-Yamamoto/golang-grpc-server/database/spanner/schema"
-	// golang-grpc-server/database/schema
-	// "github.com/Takenari-Yamamoto/golang-grpc-server/database/schema"
 	"log"
 	"strings"
 
