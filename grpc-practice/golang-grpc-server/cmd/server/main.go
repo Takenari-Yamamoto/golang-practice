@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"log"
 
-	util "github.com/Takenari-Yamamoto/golang-grpc-server/util"
+	"github.com/Takenari-Yamamoto/golang-grpc-server/database"
 )
 
 func main() {
 	ctx := context.Background()
-	dbClient, err := util.NewSpannerClient(ctx)
+	dbClient, err := database.NewSpannerClient(ctx)
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
