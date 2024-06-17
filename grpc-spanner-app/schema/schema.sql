@@ -1,0 +1,5 @@
+CREATE TABLE Users (
+  UserId STRING(36) NOT NULL,
+  UserName STRING(64),
+  Email STRING(128)
+) PRIMARY KEY (UserId);
