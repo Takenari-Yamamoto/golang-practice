@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package service;
+
+option go_package = "grpc-spanner-app/gen/service";
+
+service UserService {
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+}
+
+message GetUserRequest {
+  string user_id = 1;
+}
+
+message GetUserResponse {
+  string user_id = 1;
+  string name = 2;
+}
